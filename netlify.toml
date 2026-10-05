@@ -9,7 +9,7 @@
 # tienda responde con error en todo lo que venga de la API.
 [[redirects]]
   from = "/api/*"
-  to = "https://symcomputer-backend-production.up.railway.app/api/:splat"
+  to = "https://symcomputerbackend-production.up.railway.app/api/:splat"
   status = 200
   force = true
 
