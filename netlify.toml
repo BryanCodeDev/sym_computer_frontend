@@ -1,0 +1,46 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# El frontend llama SIEMPRE a /api en el mismo origen; este redirect es lo que
+# lo lleva al backend. Por eso en producción no hace falta definir VITE_API_URL.
+#
+# OJO: si el servicio de Railway está detenido, este dominio devuelve 404 y la
+# tienda responde con error en todo lo que venga de la API.
+[[redirects]]
+  from = "/api/*"
+  to = "https://symcomputer-backend-production.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["src/**/*"]
+
+[dev]
+  command = "npm run dev"
+  port = 5173
+  targetPort = 3001
